@@ -1,11 +1,12 @@
 #include <cstdio>
 #include <vector>
+#include <string>
 #include <SDL.h>
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
-void fail(const char* reason);
+void fail(const std::string& reason);
 
 void init(SDL_Window*& window, SDL_Surface*& screen_surface) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -80,7 +81,6 @@ int main() {
     return EXIT_SUCCESS;
 }
 
-void fail(const char* reason) {
-    printf("%s", reason);
-    EXIT_FAILURE;
+void fail(const std::string& reason) {
+    printf("%s", reason.c_str());
 }
