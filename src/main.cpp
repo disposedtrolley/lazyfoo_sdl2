@@ -4,15 +4,9 @@
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
-void fail(const char* reason) {
-    printf("%s", reason);
-    EXIT_FAILURE;
-}
+void fail(const char* reason);
 
-int main() {
-    SDL_Window* window = nullptr;
-    SDL_Surface* screen_surface = nullptr;
-
+void init(SDL_Window*& window, SDL_Surface*& screen_surface) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         char* error;
         asprintf(&error, "SDL could not initialise! SDL_Error: %s\n", SDL_GetError());
@@ -33,6 +27,14 @@ int main() {
     }
 
     screen_surface = SDL_GetWindowSurface(window);
+}
+
+int main() {
+    SDL_Window* window = nullptr;
+    SDL_Surface* screen_surface = nullptr;
+
+    init(window, screen_surface);
+
     SDL_FillRect(screen_surface,
                  nullptr,
                  SDL_MapRGB(screen_surface->format, 0xFF, 0xFF, 0xFF));
@@ -54,4 +56,9 @@ int main() {
     SDL_Quit();
 
     return EXIT_SUCCESS;
+}
+
+void fail(const char* reason) {
+    printf("%s", reason);
+    EXIT_FAILURE;
 }
