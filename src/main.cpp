@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <vector>
 #include <SDL.h>
 
 const int SCREEN_WIDTH = 640;
@@ -29,15 +30,33 @@ void init(SDL_Window*& window, SDL_Surface*& screen_surface) {
     screen_surface = SDL_GetWindowSurface(window);
 }
 
+void load_media(const char* bmp_path, SDL_Surface*& surface) {
+   surface = SDL_LoadBMP(bmp_path);
+   if (surface == nullptr) {
+       char* error;
+       asprintf(&error, "Unable to load image %s! SDL_Error: %s\n", bmp_path, SDL_GetError());
+       fail(error);
+   }
+}
+
+void close(const std::vector<SDL_Surface*>& surfaces, SDL_Window* window) {
+    for (auto&& surface : surfaces) {
+        SDL_FreeSurface(surface);
+    }
+
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+}
+
 int main() {
     SDL_Window* window = nullptr;
     SDL_Surface* screen_surface = nullptr;
+    SDL_Surface* hello_world = nullptr;
 
     init(window, screen_surface);
+    load_media("hello_world.bmp", hello_world);
 
-    SDL_FillRect(screen_surface,
-                 nullptr,
-                 SDL_MapRGB(screen_surface->format, 0xFF, 0xFF, 0xFF));
+    SDL_BlitSurface(hello_world, nullptr, screen_surface, nullptr);
 
     // The window needs to be updated before anything will show.
     SDL_UpdateWindowSurface(window);
@@ -52,8 +71,7 @@ int main() {
         }
     }
 
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    close(std::vector<SDL_Surface*>{screen_surface, hello_world}, window);
 
     return EXIT_SUCCESS;
 }

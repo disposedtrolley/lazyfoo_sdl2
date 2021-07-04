@@ -11,3 +11,5 @@ add_executable(lazyfoo_sdl2
         src/main.cpp)
 
 target_link_libraries(lazyfoo_sdl2 ${SDL2_LIBRARIES})
+
+configure_file(res/hello_world.bmp hello_world.bmp COPYONLY)
