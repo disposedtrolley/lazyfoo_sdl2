@@ -56,26 +56,27 @@ int main() {
     init(window, screen_surface);
     load_media("hello_world.bmp", hello_world);
 
-    SDL_BlitSurface(hello_world, nullptr, screen_surface, nullptr);
-
-    // UpdateWindowSurface copies the contents of the back buffer into the
-    // front buffer. Most rendering systems are double buffered in this way
-    // to allow for programs to draw incrementally without an incomplete frame
-    // being displayed on the screen.
-    SDL_UpdateWindowSurface(window);
-
     SDL_Event e;
     bool quit = false;
     while (!quit) {
+        // Keep popping events off the queue until empty (SDL_PollEvent()
+        // returns 0 in this case).
         while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT || e.type == SDL_MOUSEBUTTONDOWN){
+            if (e.type == SDL_QUIT || e.type == SDL_MOUSEBUTTONDOWN) {
                 quit = true;
             }
         }
+
+        SDL_BlitSurface(hello_world, nullptr, screen_surface, nullptr);
+
+        // UpdateWindowSurface copies the contents of the back buffer into the
+        // front buffer. Most rendering systems are double buffered in this way
+        // to allow for programs to draw incrementally without an incomplete frame
+        // being displayed on the screen.
+        SDL_UpdateWindowSurface(window);
     }
 
     close(std::vector<SDL_Surface*>{screen_surface, hello_world}, window);
-
     return EXIT_SUCCESS;
 }
 
