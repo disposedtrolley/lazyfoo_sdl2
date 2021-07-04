@@ -58,7 +58,10 @@ int main() {
 
     SDL_BlitSurface(hello_world, nullptr, screen_surface, nullptr);
 
-    // The window needs to be updated before anything will show.
+    // UpdateWindowSurface copies the contents of the back buffer into the
+    // front buffer. Most rendering systems are double buffered in this way
+    // to allow for programs to draw incrementally without an incomplete frame
+    // being displayed on the screen.
     SDL_UpdateWindowSurface(window);
 
     SDL_Event e;
