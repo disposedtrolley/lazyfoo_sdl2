@@ -31,13 +31,15 @@ void init(SDL_Window*& window, SDL_Surface*& screen_surface) {
     screen_surface = SDL_GetWindowSurface(window);
 }
 
-void load_media(const char* bmp_path, SDL_Surface*& surface) {
-   surface = SDL_LoadBMP(bmp_path);
-   if (surface == nullptr) {
-       char* error;
-       asprintf(&error, "Unable to load image %s! SDL_Error: %s\n", bmp_path, SDL_GetError());
-       fail(error);
-   }
+SDL_Surface* load_surface(const std::string& path) {
+    SDL_Surface* surface = SDL_LoadBMP(path.c_str());
+    if (surface == nullptr) {
+        char* error;
+        asprintf(&error, "Unable to load image %s! SDL_Error: %s\n", path.c_str(), SDL_GetError());
+        fail(error);
+    }
+
+    return surface;
 }
 
 void close(const std::vector<SDL_Surface*>& surfaces, SDL_Window* window) {
@@ -52,10 +54,9 @@ void close(const std::vector<SDL_Surface*>& surfaces, SDL_Window* window) {
 int main() {
     SDL_Window* window = nullptr;
     SDL_Surface* screen_surface = nullptr;
-    SDL_Surface* hello_world = nullptr;
 
     init(window, screen_surface);
-    load_media("hello_world.bmp", hello_world);
+    SDL_Surface* hello_world = load_surface("hello_world.bmp");
 
     SDL_Event e;
     bool quit = false;
